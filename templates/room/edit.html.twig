@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification bien{% endblock %}
+
+{% block body %}
+    <h1>Modifier le bien : {{ room.summary }}</h1>
+
+    {{ include('room/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <p> <a href="{{ path('reservation_new', {'id': room.id, 'unvailable': true}) }}">Ajouter une période de non disponibilité</a> </p>
+
+    <p> <a href="{{ path('room_index') }}">Revenir à la liste des biens.</a> </p>
+
+    {{ include('room/_delete_form.html.twig') }}
+{% endblock %}

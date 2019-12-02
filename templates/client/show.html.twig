@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client{% endblock %}
+
+{% block body %}
+    <h1>{{ client.firstname }} {{ client.familyname }}</h1>
+
+    <table class="table">
+        <tbody>
+            {# <tr>
+                <th>Id</th>
+                <td>{{ client.id }}</td>
+            </tr> #}
+            <tr>
+                <th>Prénom</th>
+                <td>{{ client.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ client.familyname }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ client.address }}</td>
+            </tr>
+            <tr>
+                <th>Pays</th>
+                <td>{{ client.country }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {# <a href="{{ path('client_index') }}">back to list</a> #}
+    
+    {% if is_granted('ROLE_ADMIN') or client == app.user.client %}
+        <a href="{{ path('client_edit', {'id': client.id}) }}">Editer</a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('client/_delete_form.html.twig', {'button_label': 'Supprimer'}) }}
+    {% endif %}
+{% endblock %}

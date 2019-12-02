@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lieu : {{room.summary}}{% endblock %}
+
+{% block body %}
+    <h1>{{ room.summary }}</h1>
+
+    <table class="table">
+        <tbody>
+            {# <tr>
+                <th>Id</th>
+                <td>{{ room.id }}</td>
+            </tr> #}
+            <tr>
+                <th>Titre</th>
+                <td>{{ room.summary }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ room.description }}</td>
+            </tr>
+            <tr>
+                <th>Nombre de places</th>
+                <td>{{ room.capacity }}</td>
+            </tr>
+            <tr>
+                <th>Superficie</th>
+                <td>{{ room.superficy }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ room.price }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ room.address }}</td>
+            </tr>
+            <tr>
+                <th>Propriétaire</th>
+                <td> <a href="{{ path('owner_show', {'id': room.owner.id}) }}">{{ room.owner }}</a></td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td>
+                {% for region in room.region %}
+                    <a href="{{ path('region_rooms', {'id': region.id}) }}">{{ region.getName() }}</a>
+                {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('room_index') }}">Revenir à la liste des couette & café.</a>
+    
+
+    {% if app.user.client or is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('comment_new', {'id': room.id}) }}">Laisser un commentaire</a>
+    {% endif %}
+
+    <a href="{{ path('room_comment', {'id': room.id}) }}">Voir les commentaires</a>
+
+    {% if is_granted('ROLE_ADMIN') or room.owner == app.user.owner %}
+        <a href="{{ path('room_edit', {'id': room.id}) }}">Editer</a>
+    {% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('room/_delete_form.html.twig') }}
+    {% endif %}
+{% endblock %}

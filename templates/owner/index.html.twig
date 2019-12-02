@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Propriétaires{% endblock %}
+
+{% block body %}
+    <h1>Listes des propriétaires</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Pays</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for owner in owners %}
+            <tr>
+                <td>{{ owner.id }}</td>
+                <td>{{ owner.ffirstname }}</td>
+                <td>{{ owner.familyname }}</td>
+                <td>{{ owner.address }}</td>
+                <td>{{ owner.country }}</td>
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    <a href="{{ path('owner_show', {'id': owner.id}) }}">Plus d'informations</a>
+                    <a href="{{ path('owner_edit', {'id': owner.id}) }}">Editer</a>
+                </td>
+                {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun profil trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('owner_new') }}">Nouveau propriétaire</a>
+    {% endif %}
+{% endblock %}

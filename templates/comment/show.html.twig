@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Commentaires</h1>
+
+    <table class="table">
+        <tbody>
+            {# <tr>
+                <th>Id</th>
+                <td>{{ comment.id }}</td>
+            </tr> #}
+            <tr>
+                <th>Lieu</th>
+                <td><a href="{{ path('room_show', {'id': comment.room.id}) }}">{{ comment.room.summary }}</a></td>
+            </tr>
+            <tr>
+                <th>Client</th>
+                <td><a href="{{ path('client_show', {'id': comment.client.id}) }}">{{ comment.client }}</a></td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ comment.message }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('comment_index') }}">Revenir à la liste des commentaires</a>
+
+    {% if (app.user.client and (comment.client.id == app.user.client.id)) or is_granted('ROLE_ADMIN')  %}
+        <a href="{{ path('comment_edit', {'id': comment.id}) }}">Editer</a>
+        {{ include('comment/_delete_form.html.twig') }}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Régions{% endblock %}
+
+{% block body %}
+    <h1>Liste des régions</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Présentation</th>
+                <th>Pays</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for region in regions %}
+            <tr>
+                <td>{{ region.id }}</td>
+                <td>{{ region.name }}</td>
+                <td>{{ region.presentation }}</td>
+                <td>{{ region.country }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    <a href="{{ path('region_show', {'id': region.id}) }}">Plus d'informations</a>
+                    <a href="{{ path('region_edit', {'id': region.id}) }}">Editer</a>
+                </td>
+                {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune région n'a été trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('region_new') }}">Nouvelle région</a>
+    {% endif %}
+{% endblock %}

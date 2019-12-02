@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservations{% endblock %}
+
+{% block body %}
+    {% if titre is defined %}
+        <h1>Réservations pour le bien : {{ titre != null ? titre : "?" }}</h1>
+    {% else %}
+        <h1> Liste des réservations </h1>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Validée</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Lieu</th>
+                <th>Client</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.validate ? 'Oui' : 'Non' }}</td>
+                <td>{{ reservation.startDate|date("d/m/Y") }}</td>
+                <td>{{ reservation.endDate|date("d/m/Y") }}</td>
+                <td> <a href="{{ path('room_show', {'id': reservation.room.id}) }}">{{ reservation.room.summary }}</a></td>
+                <td> <a href="{{ path('client_show', {'id': reservation.client.id}) }}">{{ reservation.client }}</a></td>
+                <td>
+                    <a href="{{ path('reservation_show', {'id': reservation.id}) }}">Plus d'informations</a>
+                    {% if is_granted('ROLE_ADMIN')  %}
+                        <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">Editer la réservation</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucune réservation trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('reservation_new') }}">Nouvelle réservation</a>
+    {% endif %}
+{% endblock %}

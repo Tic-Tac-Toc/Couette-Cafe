@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Couette & café{% endblock %}
+
+{% block body %}
+    {% if title is defined %}        
+        <h1>Liste des couette & café dans la région : {{ title }}</h1>
+    {% else %}
+        <h1>Liste des couette & café</h1>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Annonce</th>
+                <th>Description</th>
+                <th>Places</th>
+                <th>Superficie</th>
+                <th>Prix</th>
+                <th>Adresse</th>
+                <th>Region</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for room in rooms %}
+            <tr>
+                {# <td>{{ room.id }}</td> #}
+                <td>{{ room.summary }}</td>
+                <td>{{ room.description }}</td>
+                <td>{{ room.capacity }}</td>
+                <td>{{ room.superficy }}</td>
+                <td>{{ room.price }}</td>
+                <td>{{ room.address }}</td>
+                <td> 
+                {% for region in room.region %}
+                    <a href="{{ path('region_rooms', {'id': region.id}) }}">{{ region.getName() }}</a>
+                {% endfor %}
+                </td>
+                <td>
+                    <ul>
+                        <li><a href="{{ path('room_show', {'id': room.id}) }}">Plus d'informations</a></li>
+                    {% if (app.user.owner and (room.owner.getId() == app.user.owner.id)) or is_granted('ROLE_ADMIN')  %}
+                        <li><a href="{{ path('room_edit', {'id': room.id}) }}">Editer</a></br>
+                        <li><a href="{{ path('room_check', {'id': room.id}) }}">Voir les réservations</a></li>
+                    {% endif %}
+                    {% if app.user.client %}
+                        <li><a href="{{ path('reservation_new', {'id': room.id}) }}">Réserver</a></li>
+                    {% if room.id in app.session.get('likes') %}
+                        <li><a href="{{ path('like_add', {'id': room.id}) }}">Je n'aime plus ♡</a></li>
+                    {% else %}
+                        <li><a href="{{ path('like_add', {'id': room.id}) }}">J'aime ♥</a></li>
+                    {% endif %}
+                    {% endif %}
+                    </ul>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucune chambre n'a été trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') or app.user.owner %}
+        <a href="{{ path('room_new') }}">Nouveau bien</a>
+    {% endif %}
+{% endblock %}

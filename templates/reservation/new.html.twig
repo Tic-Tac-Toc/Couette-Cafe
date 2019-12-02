@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle réservation{% endblock %}
+
+{% block body %}
+    {% if not unvailable %}
+        <h1>Réservation de la chambre : {{ room != null ? room.summary : "?" }}</h1>
+        <h1> Prix : {{ room != null ? room.price : "?" }}</h1>
+    {% else %}
+        <h1> Ajout d'une période d'indisponibilité pour la chambre : {{ room != null ? room.summary : "?" }} </h1>
+    {% endif %}
+
+    {{ include('reservation/_form.html.twig') }}
+
+    {# <a href="{{ path('reservation_index') }}">back to list</a> #}
+{% endblock %}

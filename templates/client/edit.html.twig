@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier{% endblock %}
+
+{% block body %}
+    <h1>Modifier le profil client</h1>
+
+    {{ include('client/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    {# <a href="{{ path('client_index') }}">back to list</a> #}
+
+    </br>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('client/_delete_form.html.twig', {'button_label': 'Supprimer'}) }}
+    {% endif %}
+{% endblock %}
